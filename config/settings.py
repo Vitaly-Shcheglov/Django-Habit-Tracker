@@ -42,12 +42,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     'rest_framework',
+    'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
     'django_filters',
     'users',
     'habits',
-    'subscriptions'
+    'subscriptions',
+    'notifications',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -88,7 +90,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME", "lms_db"),
+        'NAME': os.getenv("DB_NAME", "habit_tracker_db"),
         'USER': os.getenv("DB_USER", "postgres"),
         'PASSWORD': os.getenv("DB_PASSWORD", "cgfhnfr2009"),
         'HOST': os.getenv("DB_HOST", "localhost"),
@@ -147,6 +149,8 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 REST_FRAMEWORK = {
+       'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+       'PAGE_SIZE': 5,
        'DEFAULT_AUTHENTICATION_CLASSES': (
            'rest_framework_simplejwt.authentication.JWTAuthentication',
        ),
@@ -178,5 +182,12 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
-
+    # 'send-reminders-every-minute': {
+    #     'task': 'notifications.tasks.send_scheduled_reminders',
+    #     'schedule': crontab(),
+    # },
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "https://yourfrontend.com",
+]
