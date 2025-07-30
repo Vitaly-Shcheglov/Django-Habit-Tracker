@@ -21,7 +21,7 @@ def send_reminder(habit_id, chat_id):
 
         message = f"Напоминание: Время выполнять привычку '{habit.action}' в '{habit.location}'."
 
-        response = requests.post(TELEGRAM_API_URL, data={'chat_id': chat_id, 'text': message})
+        response = requests.post(TELEGRAM_API_URL, data={"chat_id": chat_id, "text": message})
 
         if response.status_code != 200:
             raise Exception(f"Ошибка при отправке сообщения: {response.text}")

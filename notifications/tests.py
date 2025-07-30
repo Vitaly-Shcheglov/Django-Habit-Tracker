@@ -7,6 +7,7 @@ from .serializers import NotificationSerializer
 
 User = get_user_model()
 
+
 class NotificationModelTest(TestCase):
     """
     Тесты для модели Notification.
@@ -17,14 +18,11 @@ class NotificationModelTest(TestCase):
         Создает пользователя и уведомление для тестирования.
         """
         self.user = User.objects.create_user(
-            email='testuser@example.com',
-            password='testpassword',
-            phone='1234567890',
-            city='Test City'
+            email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.notification = Notification.objects.create(
             user=self.user,
-            message='Your habit is due!',
+            message="Your habit is due!",
         )
 
     def test_notification_creation(self):
@@ -32,7 +30,7 @@ class NotificationModelTest(TestCase):
         Проверяет, что уведомление было создано правильно.
         """
         self.assertEqual(self.notification.user, self.user)
-        self.assertEqual(self.notification.message, 'Your habit is due!')
+        self.assertEqual(self.notification.message, "Your habit is due!")
 
     def test_notification_str(self):
         """
@@ -52,10 +50,7 @@ class NotificationAPITest(TestCase):
         """
         self.client = APIClient()
         self.user = User.objects.create_user(
-            email='testuser@example.com',
-            password='testpassword',
-            phone='1234567890',
-            city='Test City'
+            email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.client.force_authenticate(user=self.user)
 
@@ -63,21 +58,27 @@ class NotificationAPITest(TestCase):
         """
         Проверяет, что пользователь может создать новое уведомление.
         """
-        response = self.client.post('/api/notifications/', {
-            'message': 'Your habit is due!',
-        })
+        response = self.client.post(
+            "/api/notifications/",
+            {
+                "message": "Your habit is due!",
+            },
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Notification.objects.count(), 1)
-        self.assertEqual(Notification.objects.get().message, 'Your habit is due!')
+        self.assertEqual(Notification.objects.get().message, "Your habit is due!")
 
     def test_get_user_notifications(self):
         """
         Проверяет, что пользователь может получить свой список уведомлений.
         """
-        self.client.post('/api/notifications/', {
-            'message': 'Your habit is due!',
-        })
-        response = self.client.get('/api/notifications/')
+        self.client.post(
+            "/api/notifications/",
+            {
+                "message": "Your habit is due!",
+            },
+        )
+        response = self.client.get("/api/notifications/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
@@ -92,14 +93,11 @@ class NotificationSerializerTest(TestCase):
         Проверяет, что валидные данные сериализуются правильно.
         """
         user = User.objects.create_user(
-            email='testuser@example.com',
-            password='testpassword',
-            phone='1234567890',
-            city='Test City'
+            email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         notification_data = {
-            'user': user.id,
-            'message': 'Your habit is due!',
+            "user": user.id,
+            "message": "Your habit is due!",
         }
         serializer = NotificationSerializer(data=notification_data)
         self.assertTrue(serializer.is_valid())
@@ -108,7 +106,6 @@ class NotificationSerializerTest(TestCase):
         """
         Проверяет, что невалидные данные не проходят валидацию.
         """
-        notification_data = {
-        }
+        notification_data = {}
         serializer = NotificationSerializer(data=notification_data)
         self.assertFalse(serializer.is_valid())

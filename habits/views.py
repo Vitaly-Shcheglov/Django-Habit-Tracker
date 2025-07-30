@@ -4,11 +4,13 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Habit
 from .serializers import HabitSerializer
 
+
 class HabitViewSet(viewsets.ModelViewSet):
     """
     Представление для работы с привычками.
     Обеспечивает полный набор операций CRUD для модели Habit.
     """
+
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
@@ -27,6 +29,7 @@ class UserHabitListView(generics.ListAPIView):
     """
     Представление для получения списка привычек текущего пользователя с пагинацией.
     """
+
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
 
@@ -38,6 +41,7 @@ class PublicHabitListView(generics.ListAPIView):
     """
     Представление для получения списка публичных привычек.
     """
+
     serializer_class = HabitSerializer
 
     def get_queryset(self):
@@ -48,6 +52,7 @@ class HabitCreateView(generics.CreateAPIView):
     """
     Представление для создания новой привычки.
     """
+
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
 
@@ -59,6 +64,7 @@ class HabitUpdateView(generics.UpdateAPIView):
     """
     Представление для редактирования привычки.
     """
+
     queryset = Habit.objects.all()
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
@@ -68,5 +74,6 @@ class HabitDeleteView(generics.DestroyAPIView):
     """
     Представление для удаления привычки.
     """
+
     queryset = Habit.objects.all()
     permission_classes = [IsAuthenticated]

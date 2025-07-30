@@ -6,17 +6,21 @@ from .serializers import UserSerializer
 
 User = get_user_model()
 
+
 class UserListCreateView(generics.ListCreateAPIView):
     """
     Представление для создания и просмотра пользователей.
     """
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     Представление для получения, обновления и удаления пользователя.
     """
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -26,13 +30,15 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
 
-        token['username'] = user.username
-        token['email'] = user.email
+        token["username"] = user.username
+        # token["email"] = user.email
 
         return token
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     """
     Класс для получения JWT токена с дополнительными полями.
     """
+
     serializer_class = CustomTokenObtainPairSerializer

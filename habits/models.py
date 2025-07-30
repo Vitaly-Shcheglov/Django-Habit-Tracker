@@ -24,12 +24,13 @@ class Habit(models.Model):
         is_public (bool): Признак публичности привычки.
         last_performed (DateTimeField): Дата последнего выполнения привычки.
     """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.CharField(max_length=255)
     time = models.TimeField()
     action = models.CharField(max_length=255)
     pleasant_habit = models.BooleanField(default=False)
-    related_habit = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
+    related_habit = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     frequency = models.PositiveIntegerField(default=1)
     reward = models.CharField(max_length=255, blank=True, null=True)
     time_to_complete = models.PositiveIntegerField()
@@ -39,7 +40,7 @@ class Habit(models.Model):
     class Meta:
         verbose_name = "Habit"
         verbose_name_plural = "Habits"
-        unique_together = ('user', 'action')
+        unique_together = ("user", "action")
 
     def clean(self):
         """

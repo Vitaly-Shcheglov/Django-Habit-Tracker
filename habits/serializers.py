@@ -2,6 +2,7 @@ from rest_framework import serializers, viewsets
 from .models import Habit
 from rest_framework.permissions import IsAuthenticated
 
+
 class HabitSerializer(serializers.ModelSerializer):
     """
     Сериализатор для модели Habit.
@@ -9,9 +10,11 @@ class HabitSerializer(serializers.ModelSerializer):
     Позволяет преобразовывать экземпляры модели Habit в JSON-формат
     и обратно, а также проводить валидацию входящих данных.
     """
+
     class Meta:
         model = Habit
-        fields = '__all__'
+        fields = "__all__"
+
 
 class HabitViewSet(viewsets.ModelViewSet):
     """
@@ -20,6 +23,7 @@ class HabitViewSet(viewsets.ModelViewSet):
     Обеспечивает полный набор операций CRUD (создание, чтение, обновление, удаление)
     для модели Habit. Доступ к данным ограничен только для аутентифицированных пользователей.
     """
+
     serializer_class = HabitSerializer
     permission_classes = [IsAuthenticated]
 

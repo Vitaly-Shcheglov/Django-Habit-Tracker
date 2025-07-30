@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 from rest_framework import status
 from .serializers import UserSerializer
 
+
 class CustomUserModelTest(TestCase):
     """
     Тесты для модели CustomUser.
@@ -14,18 +15,15 @@ class CustomUserModelTest(TestCase):
         Создает пользователя для тестирования.
         """
         self.user = CustomUser.objects.create_user(
-            email='testuser@example.com',
-            password='testpassword',
-            phone='1234567890',
-            city='Test City'
+            email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
 
     def test_user_creation(self):
         """
         Проверяет, что пользователь был создан правильно.
         """
-        self.assertEqual(self.user.email, 'testuser@example.com')
-        self.assertTrue(self.user.check_password('testpassword'))
+        self.assertEqual(self.user.email, "testuser@example.com")
+        self.assertTrue(self.user.check_password("testpassword"))
 
     def test_user_str(self):
         """
@@ -45,22 +43,17 @@ class UserAPITest(TestCase):
         """
         self.client = APIClient()
         self.user = CustomUser.objects.create_user(
-            email='testuser@example.com',
-            password='testpassword',
-            phone='1234567890',
-            city='Test City'
+            email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
 
     def test_create_user(self):
         """
         Проверяет, что можно создать нового пользователя.
         """
-        response = self.client.post('/api/users/', {
-            'email': 'newuser@example.com',
-            'password': 'newpassword',
-            'phone': '0987654321',
-            'city': 'New City'
-        })
+        response = self.client.post(
+            "/api/users/",
+            {"email": "newuser@example.com", "password": "newpassword", "phone": "0987654321", "city": "New City"},
+        )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(CustomUser.objects.count(), 2)
 
@@ -68,7 +61,7 @@ class UserAPITest(TestCase):
         """
         Проверяет, что можно получить список пользователей.
         """
-        response = self.client.get('/api/users/')
+        response = self.client.get("/api/users/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
@@ -83,10 +76,10 @@ class UserSerializerTest(TestCase):
         Проверяет, что валидные данные сериализуются правильно.
         """
         user_data = {
-            'email': 'testuser@example.com',
-            'password': 'testpassword',
-            'phone': '1234567890',
-            'city': 'Test City',
+            "email": "testuser@example.com",
+            "password": "testpassword",
+            "phone": "1234567890",
+            "city": "Test City",
         }
         serializer = UserSerializer(data=user_data)
         self.assertTrue(serializer.is_valid())
@@ -95,7 +88,6 @@ class UserSerializerTest(TestCase):
         """
         Проверяет, что невалидные данные не проходят валидацию.
         """
-        user_data = {
-        }
+        user_data = {}
         serializer = UserSerializer(data=user_data)
         self.assertFalse(serializer.is_valid())
