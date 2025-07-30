@@ -1,8 +1,39 @@
-# Habit Tracker
+# Django Habit Tracker
 
 ## Описание проекта
 
-Habit Tracker — это веб-приложение, созданное для отслеживания привычек пользователей. Приложение позволяет пользователям создавать, редактировать и удалять привычки, а также получать уведомления о выполнении привычек. Проект реализован на Django с использованием Django REST Framework для создания API.
+Django Habit Tracker — это веб-приложение, созданное для отслеживания привычек пользователей. Приложение позволяет пользователям создавать, редактировать и удалять привычки, а также получать уведомления о выполнении привычек. Проект реализован на Django с использованием Django REST Framework для создания API.
+                
+
+## Установка
+
+1. **Клонировать репозиторий**:
+
+   git clone https://github.com/yourusername/habit-tracker.git
+   cd habit-tracker
+
+2. **Создайте и активируйте виртуальное окружение**:
+
+   python -m venv venv
+   .\venv\Scripts\activate  # Для Windows
+   # source venv/bin/activate  # Для macOS/Linux
+
+3. **Установите зависимости**:
+
+   pip install -r requirements.txt
+
+4. **Настройте переменные окружения**: Создайте файл `.env` и добавьте необходимые переменные, например:
+
+   TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+
+5. **Примените миграции**:
+
+   python manage.py migrate
+
+6. **Запустите сервер**:
+
+   python manage.py runserver
+
 
 ## Задачи
 
@@ -23,74 +54,178 @@ Habit Tracker — это веб-приложение, созданное для 
 - **Flake8**: Результат проверки Flake8 равен 100% (при исключении миграций).
 - **GitHub**: Решение выложено на GitHub.
 
+
 ### Эндпоинты
 
-- **Регистрация**: `POST /api/users/`
-- **Авторизация**: `POST /api/token/`
-- **Обновление токена**: `POST /api/token/refresh/`
-- **Список привычек текущего пользователя**: `GET /api/habits/user/`
-- **Список публичных привычек**: `GET /api/habits/public/`
-- **Создание привычки**: `POST /api/habits/create/`
-- **Редактирование привычки**: `PATCH /api/habits/<int:pk>/edit/`
-- **Удаление привычки**: `DELETE /api/habits/<int:pk>/delete/`
+#### Регистрация
 
-## Установка
+- **POST** `/api/users/` — Регистрация нового пользователя.
 
-1. **Клонировать репозиторий**:
+#### Авторизация
 
-   ```bash
-   git clone https://github.com/yourusername/habit-tracker.git
-   cd habit-tracker
-   ```
+- **POST** `/api/token/` — Получение JWT токена.
+- **POST** `/api/token/refresh/` — Обновление JWT токена.
 
-2. **Создайте и активируйте виртуальное окружение**:
+#### Привычки
 
-   ```bash
-   python -m venv venv
-   .\venv\Scripts\activate  # Для Windows
-   # source venv/bin/activate  # Для macOS/Linux
-   ```
+- **GET** `/api/habits/user/` — Список привычек текущего пользователя с пагинацией (по 5 привычек на страницу).
+- **GET** `/api/habits/public/` — Список публичных привычек.
+- **POST** `/api/habits/create/` — Создание новой привычки.
+- **PATCH** `/api/habits/<int:pk>/edit/` — Редактирование привычки по ID.
+- **DELETE** `/api/habits/<int:pk>/delete/` — Удаление привычки по ID.
 
-3. **Установите зависимости**:
+#### Уведомления
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+- **GET** `/api/notifications/` — Получение списка уведомлений текущего пользователя.
+- **POST** `/api/notifications/` — Создание нового уведомления.
 
-4. **Настройте переменные окружения**: Создайте файл `.env` и добавьте необходимые переменные, например:
+#### Подписки
 
-   ```
-   TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-   ```
+- **GET** `/api/subscriptions/` — Получение списка подписок текущего пользователя.
+- **POST** `/api/subscriptions/` — Создание новой подписки на привычку.
 
-5. **Примените миграции**:
 
-   ```bash
-   python manage.py migrate
-   ```
+## Подробнее
 
-6. **Запустите сервер**:
+Чтобы проверить работу ваших эндпоинтов с помощью Postman, вам нужно выполнить следующие шаги:
 
-   ```bash
-   python manage.py runserver
-   ```
+### Использование Postman
+
+1. Откройте Postman.
+2. Создайте новый запрос:
+   - Нажмите на "New" и выберите "Request".
+   - Введите имя запроса и выберите коллекцию для сохранения (или создайте новую).
+3. Выберите метод (GET, POST, PUT, DELETE) и введите URL.
+4. Добавьте тело запроса:
+   - Для POST и PUT выберите "Body" и установите тип на "raw" с форматом JSON.
+   - Вставьте JSON-данные в текстовое поле.
+5. Нажмите "Send" для выполнения запроса и посмотрите на ответ.
+
+### 1. Регистрация пользователя
+
+URL: /api/users/  
+Метод: POST
+
+Пример запроса:
+
+curl -X POST http://127.0.0.1:8000/api/users/ \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "newuser@example.com",
+    "password": "newpassword",
+    "phone": "9876543210",
+    "city": "New City"
+}'
+
+
+### 2. Авторизация пользователя (получение токена)
+
+URL: /api/token/  
+Метод: POST
+
+Пример запроса:
+
+curl -X POST http://127.0.0.1:8000/api/token/ \
+-H "Content-Type: application/json" \
+-d '{
+    "email": "testuser@example.com",
+    "password": "testpassword"
+}'
+
+
+Ответ: Вы получите JSON-ответ с access и refresh токенами.
+
+### 3. Создание привычки
+
+URL: /api/habits/create/  
+Метод: POST
+
+Пример запроса:
+
+curl -X POST http://127.0.0.1:8000/api/habits/create/ \
+-H "Authorization: Bearer <your_access_token>" \
+-H "Content-Type: application/json" \
+-d '{
+    "location": "Park",
+    "time": "10:00:00",
+    "action": "Jogging",
+    "pleasant_habit": false,
+    "frequency": 1,
+    "time_to_complete": 60,
+    "is_public": true
+}'
+
+
+### 4. Создание уведомления
+
+URL: /api/notifications/  
+Метод: POST
+
+Пример запроса:
+
+curl -X POST http://127.0.0.1:8000/api/notifications/ \
+-H "Authorization: Bearer <your_access_token>" \
+-H "Content-Type: application/json" \
+-d '{
+    "message": "Your habit is due!"
+}'
+
+
+### 5. Создание подписки
+
+URL: /api/subscriptions/  
+Метод: POST
+
+Пример запроса:
+
+curl -X POST http://127.0.0.1:8000/api/subscriptions/ \
+-H "Authorization: Bearer <your_access_token>" \
+-H "Content-Type: application/json" \
+-d '{
+    "habit": 1  # Укажите ID привычки, на которую хотите подписаться
+}'
+
+
+### Примечания
+
+- Замените <your_access_token> на фактический access токен, полученный при авторизации.
+- Убедитесь, что сервер запущен и доступен по указанному адресу (например, http://127.0.0.1:8000/).
+- При использовании Postman, вы можете настроить запросы аналогичным образом, выбрав метод POST, указав URL и добавив заголовки и тело запроса в соответствующих полях.
+
+
+## Отложенные задачи и интеграция с Telegram
+
+В этом проекте реализованы отложенные задачи с использованием Celery для отправки уведомлений пользователям о выполнении привычек. Интеграция с мессенджером Telegram позволяет отправлять напоминания в личные сообщения пользователям.
+С помощью Celery и интеграции с Telegram ваше приложение может отправлять своевременные напоминания пользователям о выполнении привычек, что повышает взаимодействие и эффективность использования приложения.
+
 
 ## Тестирование
 
 Для запуска тестов используйте:
 
-```bash
 python manage.py test
-```
 
 Для проверки покрытия кода с помощью `coverage`:
 
-```bash
 coverage run manage.py test
 coverage report  # Отчет в консоли
 coverage html    # HTML отчет
-```
+
 
 ## Лицензия
 
 Этот проект лицензируется в соответствии с лицензией MIT. 
+
+
+## Заключение
+
+Этот проект представляет собой основу для создания LMS-системы, которая может быть расширена и адаптирована под ваши нужды.
+
+
+## Контакты
+
+Если у вас есть вопросы или предложения по улучшению проекта, пожалуйста, свяжитесь с автором:
+
+- Имя: Виталий Щеглов
+- Email: cgfhnfr4@gmail.com
+- GitHub: (https://github.com/Vitaly-Shcheglov)
