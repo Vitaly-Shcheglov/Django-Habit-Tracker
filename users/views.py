@@ -1,3 +1,4 @@
+from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth import get_user_model
 from rest_framework import generics
 from .serializers import UserSerializer
@@ -17,3 +18,20 @@ class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        token['username'] = user.username
+        token['email'] = user.email
+
+        return token
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Класс для получения JWT токена с дополнительными полями.
+    """
+    serializer_class = CustomTokenObtainPairSerializer
