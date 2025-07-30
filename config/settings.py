@@ -192,7 +192,7 @@ CELERY_RESULT_SERIALIZER = "json"
 
 CELERY_BEAT_SCHEDULE = {
     "send-reminders-every-minute": {
-        "task": "notifications.tasks.send_scheduled_reminders",
+        "task": "tasks.tasks.send_scheduled_reminders",
         "schedule": crontab(),
     },
 }

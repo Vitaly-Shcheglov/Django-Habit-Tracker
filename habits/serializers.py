@@ -13,7 +13,20 @@ class HabitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Habit
-        fields = "__all__"
+        fields = [
+            "id",
+            "user",
+            "location",
+            "time",
+            "action",
+            "pleasant_habit",
+            "related_habit",
+            "frequency",
+            "reward",
+            "time_to_complete",
+            "is_public",
+            "last_performed",
+        ]
 
 
 class HabitViewSet(viewsets.ModelViewSet):

@@ -1,5 +1,6 @@
 import os
 from celery import shared_task
+from habits.models import Habit
 import requests
 from django.utils import timezone
 from .models import Habit
