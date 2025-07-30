@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'habits',
     'subscriptions',
     'notifications',
+    'corsheaders',
 ]
 
 AUTH_USER_MODEL = 'users.CustomUser'
@@ -57,11 +58,23 @@ AUTH_USER_MODEL = 'users.CustomUser'
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://example.com",  # Замените на ваш фронтенд домен
+    "http://localhost:3000",  # Локальный сервер для разработки
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "authorization",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -182,10 +195,10 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
-    # 'send-reminders-every-minute': {
-    #     'task': 'notifications.tasks.send_scheduled_reminders',
-    #     'schedule': crontab(),
-    # },
+    'send-reminders-every-minute': {
+        'task': 'notifications.tasks.send_scheduled_reminders',
+        'schedule': crontab(),
+    },
 }
 
 CORS_ALLOWED_ORIGINS = [

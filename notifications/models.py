@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.utils import timezone
 
 User = get_user_model()
@@ -15,7 +16,7 @@ class Notification(models.Model):
         created_at (DateTimeField): Время создания уведомления.
         is_read (bool): Признак, было ли уведомление прочитано пользователем.
     """
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
