@@ -3,7 +3,6 @@ from celery import shared_task
 from habits.models import Habit
 import requests
 from django.utils import timezone
-from .models import Habit
 
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{os.getenv('TELEGRAM_BOT_TOKEN')}/sendMessage"
 
