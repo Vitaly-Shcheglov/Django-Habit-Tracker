@@ -105,11 +105,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("NAME", "habit_tracker_db"),
-        "USER": os.getenv("USER", "postgres"),
-        "PASSWORD": os.getenv("PASSWORD", "cgfhnfr2009"),
-        "HOST": os.getenv("HOST", "localhost"),
-        "PORT": os.getenv("PORT", "5432"),
+        "POSTGRES_DB": os.getenv("POSTGRES_DB", "habit_tracker_db"),
+        "POSTGRES_USER": os.getenv("POSTGRES_USER", "postgres"),
+        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "cgfhnfr2009"),
+        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "POSTGRES_PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -202,3 +202,7 @@ CELERY_BEAT_SCHEDULE = {
 CORS_ALLOWED_ORIGINS = [
     "https://yourfrontend.com",
 ]
+
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.redis.RedisCache", "LOCATION": "redis://redis:6379/1"}}
+
+STATIC_ROOT = "app/staticfiles/"
