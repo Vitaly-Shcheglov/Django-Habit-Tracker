@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 from datetime import timedelta
 from celery.schedules import crontab
+import json
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -108,7 +109,7 @@ DATABASES = {
         "POSTGRES_DB": os.getenv("POSTGRES_DB", "habit_tracker_db"),
         "POSTGRES_USER": os.getenv("POSTGRES_USER", "postgres"),
         "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "cgfhnfr2009"),
-        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", "db"),
         "POSTGRES_PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
@@ -184,11 +185,13 @@ SIMPLE_JWT = {
 
 load_dotenv()
 
-CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+BASE_REDIS = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", BASE_REDIS)
 
-CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND",
+BASE_REDIS)
+CELERY_ACCEPT_CONTENT =  json.loads(os.getenv("CELERY_ACCEPT_CONTENT", '["json"]'))
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
@@ -199,10 +202,19 @@ CELERY_BEAT_SCHEDULE = {
     },
 }
 
-CORS_ALLOWED_ORIGINS = [
-    "https://yourfrontend.com",
-]
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "https://yourfrontend.com").split(",")
 
-CACHES = {"default": {"BACKEND": "django.core.cache.backends.redis.RedisCache", "LOCATION": "redis://redis:6379/1"}}
+CACHE_LOCATION = os.environ.get("REDIS_CACHE_URL", os.environ.get("REDIS_URL", "redis://localhost:6379/1"))
+CACHES = {
+"default": {
+"BACKEND": "django_redis.cache.RedisCache",
+"LOCATION": CACHE_LOCATION,
+"OPTIONS": {
+"CLIENT_CLASS": "django_redis.client.DefaultClient",
+},
+}
+}
 
-STATIC_ROOT = "app/staticfiles/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
