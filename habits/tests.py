@@ -1,11 +1,11 @@
-from django.test import TestCase
-from .models import Habit
 from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient, APITestCase
+from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from .serializers import HabitSerializer
+from rest_framework.test import APIClient, APITestCase
 
+from .models import Habit
+from .serializers import HabitSerializer
 
 User = get_user_model()
 

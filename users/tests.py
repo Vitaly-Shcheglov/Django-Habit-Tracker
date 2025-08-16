@@ -1,7 +1,8 @@
 from django.test import TestCase
-from .models import CustomUser
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APIClient
+
+from .models import CustomUser
 from .serializers import UserSerializer
 
 

@@ -10,12 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import os
-from dotenv import load_dotenv
-from pathlib import Path
-from datetime import timedelta
-from celery.schedules import crontab
 import json
+import os
+from datetime import timedelta
+from pathlib import Path
+
+from celery.schedules import crontab
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,10 +28,10 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', "django-insecure-_9qvgo$$__op2s%=9g7h#*4ig5oe%2qu(6=kx^9@d4lkw4bqi2")
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-_9qvgo$$__op2s%=9g7h#*4ig5oe%2qu(6=kx^9@d4lkw4bqi2")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = []
 
@@ -189,9 +190,8 @@ BASE_REDIS = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", BASE_REDIS)
 
-CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND",
-BASE_REDIS)
-CELERY_ACCEPT_CONTENT =  json.loads(os.getenv("CELERY_ACCEPT_CONTENT", '["json"]'))
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", BASE_REDIS)
+CELERY_ACCEPT_CONTENT = json.loads(os.getenv("CELERY_ACCEPT_CONTENT", '["json"]'))
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
@@ -206,13 +206,13 @@ CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "https://yourfront
 
 CACHE_LOCATION = os.environ.get("REDIS_CACHE_URL", os.environ.get("REDIS_URL", "redis://localhost:6379/1"))
 CACHES = {
-"default": {
-"BACKEND": "django_redis.cache.RedisCache",
-"LOCATION": CACHE_LOCATION,
-"OPTIONS": {
-"CLIENT_CLASS": "django_redis.client.DefaultClient",
-},
-}
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": CACHE_LOCATION,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
 }
 
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")

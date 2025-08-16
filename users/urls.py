@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import UserListCreateView, UserDetailView
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import CustomTokenObtainPairView
+
+from .views import (CustomTokenObtainPairView, UserDetailView,
+                    UserListCreateView)
 
 app_name = "users"
 

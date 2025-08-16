@@ -1,6 +1,7 @@
 from rest_framework import serializers, viewsets
-from .models import Habit
 from rest_framework.permissions import IsAuthenticated
+
+from .models import Habit
 
 
 class HabitSerializer(serializers.ModelSerializer):

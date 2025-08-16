@@ -1,8 +1,9 @@
-from django.test import TestCase
-from .models import Notification
 from django.contrib.auth import get_user_model
-from rest_framework.test import APIClient
+from django.test import TestCase
 from rest_framework import status
+from rest_framework.test import APIClient
+
+from .models import Notification
 from .serializers import NotificationSerializer
 
 User = get_user_model()
