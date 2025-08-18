@@ -108,12 +108,15 @@ WSGI_APPLICATION = "config.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Указывает бэкенд базы данных SQLite
-        'NAME': os.path.join(BASE_DIR, 'db.test.sqlite3'),  # Указывает путь к файлу базы данных
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "POSTGRES_DB": os.getenv("POSTGRES_DB", "habit_tracker_db"),
+        "POSTGRES_USER": os.getenv("POSTGRES_USER", "postgres"),
+        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "cgfhnfr2009"),
+        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", "db"),
+        "POSTGRES_PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
-
 
 
 # Password validation
