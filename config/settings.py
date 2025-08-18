@@ -184,7 +184,6 @@ SIMPLE_JWT = {
     "USER_ID_CLAIM": "user_id",
 }
 
-load_dotenv()
 
 BASE_REDIS = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 
