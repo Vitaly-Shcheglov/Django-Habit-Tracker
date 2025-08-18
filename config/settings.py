@@ -107,11 +107,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "POSTGRES_DB": os.getenv("POSTGRES_DB", "habit_tracker_db"),
-        "POSTGRES_USER": os.getenv("POSTGRES_USER", "postgres"),
-        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "cgfhnfr2009"),
-        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", "db"),
-        "POSTGRES_PORT": os.getenv("POSTGRES_PORT", "5432"),
+        "NAME": os.getenv("POSTGRES_DB", "habit_tracker_db"),
+        "USER": os.getenv("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "cgfhnfr2009"),
+        "HOST": os.getenv("POSTGRES_HOST", "db"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
