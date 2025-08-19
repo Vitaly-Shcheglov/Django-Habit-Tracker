@@ -53,6 +53,7 @@ jobs:
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          LLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           POSTGRES_DB: habit_tracker_db
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: cgfhnfr2009
