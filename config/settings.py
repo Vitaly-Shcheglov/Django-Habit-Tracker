@@ -31,9 +31,9 @@ load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-_9qvgo$$__op2s%=9g7h#*4ig5oe%2qu(6=kx^9@d4lkw4bqi2")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(",")
 
 
 # Application definition
@@ -107,11 +107,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME":  os.getenv("NAME", "habit_tracker_db"),
-        "POSTGRES_USER": os.getenv("POSTGRES_USER", "postgres"),
-        "POSTGRES_PASSWORD": os.getenv("POSTGRES_PASSWORD", "cgfhnfr2009"),
-        "POSTGRES_HOST": os.getenv("POSTGRES_HOST", "db"),
-        "POSTGRES_PORT": os.getenv("POSTGRES_PORT", "5432"),
+        "NAME": os.environ.get("POSTGRES_DB", "habit_tracker_db"),
+        "USER": os.environ.get("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", ""),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
@@ -185,27 +185,35 @@ SIMPLE_JWT = {
 }
 
 
-CELERY_BROKER_URL = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+BASE_REDIS = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
 
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL", "redis://localhost:6379/0")
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", BASE_REDIS)
 
-CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_RESULT_BACKEND", BASE_REDIS)
+CELERY_ACCEPT_CONTENT = json.loads(os.getenv("CELERY_ACCEPT_CONTENT", '["json"]'))
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
 CELERY_BEAT_SCHEDULE = {
-    "notify-users-about-upcoming-courses-every-hour": {
-        "task": "courses.tasks.notify_users_about_upcoming_courses",
-        "schedule": crontab(minute=0, hour="*"),
-    },
-    "deactivate-inactive-users-every-day": {
-        "task": "users.tasks.deactivate_inactive_users",
-        "schedule": crontab(hour=0, minute=0),
+    "send-reminders-every-minute": {
+        "task": "tasks.tasks.send_scheduled_reminders",
+        "schedule": crontab(),
     },
 }
 
-CACHES = {"default": {"BACKEND": "django.core.cache.backends.redis.RedisCache", "LOCATION": "redis://redis:6379/1"}}
+CORS_ALLOWED_ORIGINS = os.environ.get("CORS_ALLOWED_ORIGINS", "https://yourfrontend.com").split(",")
 
-STATIC_ROOT = "app/staticfiles/"
+CACHE_LOCATION = os.environ.get("REDIS_CACHE_URL", os.environ.get("REDIS_URL", "redis://localhost:6379/1"))
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": CACHE_LOCATION,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
+
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
