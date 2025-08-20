@@ -32,6 +32,7 @@ jobs:
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: postgres
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
     services:
       postgres:
         image: postgres:17.1-alpine
@@ -55,9 +56,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Run migrations
+        run: python manage.py migrate
+
       - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
         run: python manage.py test
 
   build:
