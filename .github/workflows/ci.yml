@@ -31,12 +31,12 @@ jobs:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST: postgres
-      SECRET_KEY: 'you-will-never-guess'
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     services:
       postgres:
         image: postgres:17.1-alpine
         env:
-          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
