@@ -18,7 +18,7 @@ class HabitAPITests(APITestCase):
         Создает клиента и пользователя для тестирования API.
         """
         self.client = APIClient()
-        self.user = CustomUser.objects.create_user(
+        self.user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.client.force_authenticate(user=self.user)
@@ -131,7 +131,7 @@ class HabitModelTest(TestCase):
         """
         Создает пользователя и привычку для тестирования.
         """
-        self.user = CustomUser.objects.create_user(
+        self.user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.habit = Habit.objects.create(
