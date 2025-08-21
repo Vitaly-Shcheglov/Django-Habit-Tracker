@@ -5,6 +5,7 @@
 # from rest_framework.test import APIClient, APITestCase
 #
 # from .models import Habit
+from users.models import CustomUser
 # from .serializers import HabitSerializer
 #
 # User = get_user_model()
@@ -122,7 +123,7 @@
 #         response = self.client.delete(url)
 #         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 #         self.assertEqual(Habit.objects.count(), 0)
-#
+
 #
 # class HabitModelTest(TestCase):
 #     """
