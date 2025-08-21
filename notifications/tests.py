@@ -5,8 +5,7 @@ from rest_framework.test import APIClient
 
 from .models import Notification
 from .serializers import NotificationSerializer
-
-User = get_user_model()
+from users.models import CustomUser
 
 
 class NotificationModelTest(TestCase):
@@ -18,7 +17,7 @@ class NotificationModelTest(TestCase):
         """
         Создает пользователя и уведомление для тестирования.
         """
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.notification = Notification.objects.create(
@@ -50,7 +49,7 @@ class NotificationAPITest(TestCase):
         Создает клиента и пользователя для тестирования API.
         """
         self.client = APIClient()
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.client.force_authenticate(user=self.user)
@@ -93,7 +92,7 @@ class NotificationSerializerTest(TestCase):
         """
         Проверяет, что валидные данные сериализуются правильно.
         """
-        user = User.objects.create_user(
+        user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         notification_data = {

@@ -7,8 +7,7 @@ from habits.models import Habit
 
 from .models import Subscription
 from .serializers import SubscriptionSerializer
-
-User = get_user_model()
+from users.models import CustomUser
 
 
 class SubscriptionModelTest(TestCase):
@@ -20,7 +19,7 @@ class SubscriptionModelTest(TestCase):
         """
         Создает пользователя и привычку для тестирования.
         """
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.habit = Habit.objects.create(
@@ -62,7 +61,7 @@ class SubscriptionAPITest(TestCase):
         Создает клиента и пользователя для тестирования API.
         """
         self.client = APIClient()
-        self.user = User.objects.create_user(
+        self.user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         self.client.force_authenticate(user=self.user)
@@ -116,7 +115,7 @@ class SubscriptionSerializerTest(TestCase):
         """
         Проверяет, что валидные данные сериализуются правильно.
         """
-        user = User.objects.create_user(
+        user = CustomUser.objects.create(
             email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
         )
         habit = Habit.objects.create(
