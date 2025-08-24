@@ -106,14 +106,14 @@ jobs:
 
       - name: Verify SSH connection
         run: |
-          echo "Testing SSH connection to ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}"
+          echo "Testing SSH connection to hallovit@130.193.57.134"
           ssh -vvv -o StrictHostKeyChecking=no \
-              ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+              hallovit@130.193.57.134 \
               "echo 'SSH connection successful'"
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.MY_SERVER_IP1 }} << 'EOF'
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           
           
