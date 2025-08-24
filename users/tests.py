@@ -1,5 +1,7 @@
 from django.test import TestCase
 from users.models import CustomUser
+from rest_framework.test import APIClient
+from rest_framework import status
 
 class CustomUserModelTest(TestCase):
     """
@@ -32,3 +34,18 @@ class CustomUserModelTest(TestCase):
         Проверяет строковое представление пользователя.
         """
         self.assertEqual(str(self.user), self.user.email)
+
+
+class UserAPITest(TestCase):
+    """
+    Тесты для API представлений пользователей.
+    """
+
+    def setUp(self):
+        """
+        Создает клиента и пользователя для тестирования API.
+        """
+        self.client = APIClient()
+        self.user = CustomUser.objects.create_user(
+            email="testuser@example.com", password="testpassword", phone="1234567890", city="Test City"
+        )
