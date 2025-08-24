@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import generics
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.http import HttpRequest, HttpResponse
 
 from .serializers import UserSerializer
 
@@ -43,3 +44,13 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     """
 
     serializer_class = CustomTokenObtainPairSerializer
+
+
+def home(request):
+    """
+    Главная страница.
+
+    Возвращает приветственное сообщение.
+
+    """
+    return HttpResponse("Welcome to the Habit Tracker!")
