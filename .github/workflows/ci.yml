@@ -106,12 +106,12 @@ jobs:
 
       - name: Verify SSH connection
         run: |
-          echo "Testing SSH connection to hallovit@${{ secrets.MY_SERVER_IP1 }}"
-          ssh -vvv -o StrictHostKeyChecking=no hallovit@${{ secrets.MY_SERVER_IP1 }} "echo 'SSH connection successful'"
+          echo "Testing SSH connection to ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }}"
+          ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }} "echo 'SSH connection successful'"
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no hallovit@${{ secrets.MY_SERVER_IP1 }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }} << 'EOF'
           # Установка Docker, если он не установлен
           if ! command -v docker &> /dev/null; then
             echo "Docker не установлен. Устанавливаю Docker..."
