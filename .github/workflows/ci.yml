@@ -104,39 +104,14 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Verify SSH connection
-        run: |
-          echo "Testing SSH connection to ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }}"
-          ssh -vvv -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }} "echo 'SSH connection successful'"
-
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }} << 'EOF'
-          # Установка Docker, если он не установлен
-          if ! command -v docker &> /dev/null; then
-            echo "Docker не установлен. Устанавливаю Docker..."
-            sudo apt update && sudo apt install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
-          fi
-          
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }} << 'EOF
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
-          
-          docker run --rm \
-          --env-file /home/user1/habits/.env \
-          ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} \
-          python manage.py makemigrations --noinput
-          
-          docker run --rm \
-          --env-file /home/user1/habits/.env \
-          ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }} \
-          python manage.py migrate --no-input
-          
           docker stop myapp || true
           docker rm myapp || true
           docker run -d \
             --name myapp \
-            --env-file /home/user1/habits/.env \
             -p 80:8000 \
             ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           EOF
