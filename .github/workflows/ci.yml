@@ -106,16 +106,21 @@ jobs:
 
       - name: Verify SSH connection
         run: |
-          echo "Testing SSH connection to hallovit@130.193.57.134"
-          ssh -vvv -o StrictHostKeyChecking=no \
-              hallovit@130.193.57.134 \
-              "echo 'SSH connection successful'"
+          echo "Testing SSH connection to hallovit@${{ secrets.MY_SERVER_IP1 }}"
+          ssh -vvv -o StrictHostKeyChecking=no hallovit@${{ secrets.MY_SERVER_IP1 }} "echo 'SSH connection successful'"
 
       - name: Deploy to server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER_NAME }}@${{ secrets.SERVER_IP1 }} << 'EOF'
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
+          ssh -o StrictHostKeyChecking=no hallovit@${{ secrets.MY_SERVER_IP1 }} << 'EOF'
+          # Установка Docker, если он не установлен
+          if ! command -v docker &> /dev/null; then
+            echo "Docker не установлен. Устанавливаю Docker..."
+            sudo apt update && sudo apt install -y docker.io
+            sudo systemctl start docker
+            sudo systemctl enable docker
+          fi
           
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/myapp:${{ github.sha }}
           
           docker run --rm \
           --env-file /home/user1/habits/.env \
