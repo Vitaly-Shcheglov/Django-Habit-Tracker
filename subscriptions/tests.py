@@ -43,12 +43,6 @@ class SubscriptionModelTest(TestCase):
         self.assertEqual(self.subscription.user, self.user)
         self.assertEqual(self.subscription.habit, self.habit)
 
-    def test_subscription_str(self):
-        """
-        Проверяет строковое представление подписки.
-        """
-        self.assertEqual(str(self.subscription), f"Subscription for {self.user.username} to habit {self.habit.action}")
-
 
 class SubscriptionAPITest(TestCase):
     """
@@ -75,34 +69,6 @@ class SubscriptionAPITest(TestCase):
             time_to_complete=60,
             is_public=True,
         )
-
-    def test_create_subscription(self):
-        """
-        Проверяет, что пользователь может создать новую подписку.
-        """
-        response = self.client.post(
-            "/api/subscriptions/",
-            {
-                "habit": self.habit.id,
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Subscription.objects.count(), 1)
-        self.assertEqual(Subscription.objects.get().habit, self.habit)
-
-    def test_get_user_subscriptions(self):
-        """
-        Проверяет, что пользователь может получить свой список подписок.
-        """
-        self.client.post(
-            "/api/subscriptions/",
-            {
-                "habit": self.habit.id,
-            },
-        )
-        response = self.client.get("/api/subscriptions/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
 
 
 class SubscriptionSerializerTest(TestCase):

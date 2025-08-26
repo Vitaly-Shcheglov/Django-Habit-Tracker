@@ -1,13 +1,8 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views import (
-    HabitViewSet,
-    UserHabitListView,
-    PublicHabitListView,
-    HabitCreateView,
-    HabitUpdateView,
-    HabitDeleteView,
-)
+
+from .views import (HabitCreateView, HabitDeleteView, HabitUpdateView,
+                    HabitViewSet, PublicHabitListView, UserHabitListView)
 
 app_name = "habits"
 

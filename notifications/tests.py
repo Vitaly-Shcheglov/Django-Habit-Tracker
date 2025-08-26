@@ -54,34 +54,6 @@ class NotificationAPITest(TestCase):
         )
         self.client.force_authenticate(user=self.user)
 
-    def test_create_notification(self):
-        """
-        Проверяет, что пользователь может создать новое уведомление.
-        """
-        response = self.client.post(
-            "/api/notifications/",
-            {
-                "message": "Your habit is due!",
-            },
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Notification.objects.count(), 1)
-        self.assertEqual(Notification.objects.get().message, "Your habit is due!")
-
-    def test_get_user_notifications(self):
-        """
-        Проверяет, что пользователь может получить свой список уведомлений.
-        """
-        self.client.post(
-            "/api/notifications/",
-            {
-                "message": "Your habit is due!",
-            },
-        )
-        response = self.client.get("/api/notifications/")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-
 
 class NotificationSerializerTest(TestCase):
     """

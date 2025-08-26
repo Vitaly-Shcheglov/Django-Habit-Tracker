@@ -16,10 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
-from rest_framework import permissions
-from drf_yasg.views import get_schema_view
+from django.urls import include, path
 from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
+from users.views import home
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -36,6 +37,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", home, name="home"),
     path("api/users/", include("users.urls", namespace="users")),
     path("api/habits/", include("habits.urls", namespace="habits")),
     path("api/subscriptions/", include("subscriptions.urls", namespace="subscriptions")),

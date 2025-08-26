@@ -89,7 +89,7 @@ Django Habit Tracker — это веб-приложение, созданное 
 
 Чтобы проверить работу ваших эндпоинтов с помощью Postman, вам нужно выполнить следующие шаги:
 
-### Использование Postman
+## Использование Postman
 
 1. Откройте Postman.
 2. Создайте новый запрос:
@@ -97,7 +97,7 @@ Django Habit Tracker — это веб-приложение, созданное 
    - Введите имя запроса и выберите коллекцию для сохранения (или создайте новую).
 3. Выберите метод (GET, POST, PUT, DELETE) и введите URL.
 4. Добавьте тело запроса:
-   - Для POST и PUT выберите "Body" и установите тип на "raw" с форматом JSON.
+   - Для POST и PUT выберите "Body" и установите тип на "raw" с форматом JSON
    - Вставьте JSON-данные в текстовое поле.
 5. Нажмите "Send" для выполнения запроса и посмотрите на ответ.
 
@@ -210,6 +210,199 @@ python manage.py test
 coverage run manage.py test
 coverage report  # Отчет в консоли
 coverage html    # HTML отчет
+
+ ## Оркестрация с помощью Docker
+  - Для упрощения развертывания и управления проектом используется Docker и Docker Compose. Это позволяет запускать все необходимые сервисы с помощью одной команды. 
+  - Создан файл `docker-compose.yaml`, который описывает все необходимые сервисы для работы приложения:
+    - **Бэкенд**: Django приложение.
+    - **База данных**: PostgreSQL.
+    - **Redis**: Для управления очередями задач.
+    - **Celery**: Для обработки фоновых задач.
+    - **Celery Beat**: Для планирования периодических задач.
+
+### Установка и настройка
+ 
+ ### Предварительные требования
+
+- Python 3.12 или выше
+- Django 5.2 или выше
+- Django REST Framework
+- PostgreSQL
+- Simple JWT
+- Celery
+- Redis
+- Docker
+ 
+ Создайте новые миграции и примените их:
+   python manage.py makemigrations
+   python manage.py migrate
+
+4. Создайте суперпользователя (по желанию):
+   python manage.py createsuperuser
+
+5. Запустите сервер:
+   python manage.py runserver
+
+6. Установите и настройте Redis:
+- **Для Windows**: Используйте WSL или [Redis для Windows](https://github.com/microsoftarchive/redis/releases).
+- **Для Linux**: Установите Redis с помощью пакетного менеджера:
+
+sudo apt-get update
+sudo apt-get install redis-server
+
+- **Для macOS**: Установите Redis с помощью Homebrew:
+brew install redis
+
+Запустите Redis сервер:
+redis-server
+
+7. Настройка API ключей Stripe
+Зарегистрируйтесь на [Stripe Dashboard](https://dashboard.stripe.com/register) и получите тестовые API ключи. Сохраните ключи в `settings.py` проекта.
+
+
+### Запуск проекта
+
+- Выполните последовательно следующие команды:  
+    sudo apt update
+    sudo apt install git
+    git – version
+    cd var/www
+    git clone git@github.com:Vitaly-Shcheglov/\Django-Habit-Tracker.git
+    cd var/www/ \Django-Habit-Tracker/
+    docker compose up --build -d
+
+### Перейдите по адресу: http://127.0.0.1:8000
+  
+
+### Проверка состояния контейнеров
+
+- Чтобы убедиться, что все контейнеры подняты и работают корректно, выполните команду:
+   docker-compose ps
+- Вы должны увидеть список запущенных контейнеров с их статусом. Убедитесь, что все состояния указаны как Up.
+
+### Просмотр логов
+
+- Для проверки логов работы приложений можно воспользоваться командой:
+   docker-compose logs
+- Это поможет вам диагностировать возможные проблемы.
+
+### Проверка работоспособности сервисов
+
+- **Бэкенд**: Доступен по адресу [http://localhost:8000](http://localhost:8000).
+- **База данных PostgreSQL**: Доступна на порту 5432.
+- **Redis**: Доступен на порту 6379.
+- **Celery**: Работает в фоновом режиме для обработки задач.
+- **Celery Beat**: Работает для периодического выполнения задач.
+
+### Остановка проекта
+
+Для остановки всех сервисов выполните:
+    docker-compose down
+ 
+## Настройка удаленного сервера
+
+  - Установлены необходимые пакеты и зависимости:
+       - Python
+       - Django
+       - Gunicorn
+       - Nginx
+  - Приложение доступно по IP-адресу сервера или домену.
+  - Настроены параметры безопасности:
+    - Закрыты ненужные порты.
+    - Используются SSH-ключи для доступа.
+  - Сервер настроен для автоматической перезагрузки приложения при внесении изменений с использованием Systemd или Supervisor.
+
+### Настройка GitHub Actions Workflow
+
+  - Создан файл YAML для GitHub Actions в директории `.github/workflows`.
+  - Workflow запускается при каждом push в репозиторий и включает следующие шаги:
+  - Запуск тестов проекта.
+  - Деплой проекта на удаленный сервер после успешного прохождения тестов.
+
+### Развертывание проекта на сервере с использованием Docker
+
+  - Написан `Dockerfile` для сборки образа проекта.
+  - Настроен GitHub Actions для автоматической сборки Docker-образа и его деплоя на удаленный сервер.
+
+
+## Установка и настройка
+
+### Предварительные требования
+
+- Python 3.12 или выше
+- Django 5.2 или выше
+- Django REST Framework
+- PostgreSQL
+- Simple JWT
+- Celery
+- Redis
+
+### Установка
+
+1. Клонируйте репозиторий:
+   git clone https://github.com/Vitaly-Shcheglov/Django-LMS-project.git
+
+2. Установите зависимости:
+   pip install -r requirements.txt
+
+
+3. Создайте базу данных в PostgreSQL и настройте подключение в `settings.py`
+
+4. Создайте новые миграции и примените их:
+   python manage.py makemigrations
+   python manage.py migrate
+
+4. Создайте суперпользователя (по желанию):
+   python manage.py createsuperuser
+
+5. Запустите сервер:
+   python manage.py runserver.
+
+6. Установите и настройте Redis:
+- **Для Windows**: Используйте WSL или [Redis для Windows](https://github.com/microsoftarchive/redis/releases).
+- **Для Linux**: Установите Redis с помощью пакетного менеджера:
+
+sudo apt-get update
+sudo apt-get install redis-server
+
+- **Для macOS**: Установите Redis с помощью Homebrew:
+brew install redis
+
+Запустите Redis сервер:
+redis-server
+
+7. Настройка API ключей Stripe
+Зарегистрируйтесь на [Stripe Dashboard](https://dashboard.stripe.com/register) и получите тестовые API ключи. Сохраните ключи в `settings.py` проекта
+
+8. Настройка переменных окружения
+Создайте файл `.env` на сервере и добавьте все необходимые переменные окружения. Пример шаблона `.env`:
+
+DEBUG=False
+SECRETKEY=вашсекретныйключ
+DATABASEURL=вашURLбазыданных
+
+9. Запуск миграций
+python manage.py migrate
+
+10. Запуск сервера
+python manage.py runserver 0.0.0.0:8000
+
+11. Запуск Workflow
+После внесения изменений в код, просто выполните push в репозиторий, и GitHub Actions автоматически запустит тесты и деплой
+
+11. Настройка перед  запуском CI/CD
+Выполните последовательно следующие команды:
+  cd ~\.ssh
+  ssh -vT git@github.com или ssh -t git@github.com
+  ssh -l hallovit 84.201.142.158
+  sudo ufw status
+  sudo ufw enable
+  sudo ufw allow 80/tcp
+  sudo ufw allow 443/tcp
+  sudo ufw allow 22/tcp
+
+11. Запуск Workflow
+После внесения изменений в код, просто выполните push в репозиторий, и GitHub Actions автоматически запустит тесты и деплой
 
 
 ## Лицензия
